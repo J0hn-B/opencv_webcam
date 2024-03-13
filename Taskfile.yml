@@ -1,0 +1,19 @@
+version: "3"
+
+tasks:
+  # Share a camera on the local network
+  share_camera:
+    desc: |
+      Share windows laptop camera on local lan
+    dir: camera_server
+    cmds:
+      - pip install -r requirements.txt
+      - powershell.exe -Command "python camera.py"
+
+  # Build and run the vision container
+  run_vision:
+    desc: |
+      Show images from inside Docker container
+    cmds:
+      - docker build -t vision:latest vision
+      - docker run -it -e DISPLAY=$DISPLAY -v $(pwd)/vision/app/:/vision -v /tmp/.X11-unix:/tmp/.X11-unix --network="host" vision:latest /bin/bash
